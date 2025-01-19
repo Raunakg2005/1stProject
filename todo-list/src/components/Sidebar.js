@@ -8,6 +8,7 @@ const Sidebar = ({
   subFilter,
   setSubFilter,
   darkMode,
+  handleSignOut, // Pass the handleSignOut function as a prop
 }) => {
   return (
     <aside
@@ -17,7 +18,7 @@ const Sidebar = ({
     >
       {/* Sidebar Header */}
       <div className="flex justify-between items-center mb-8">
-        <h2 className="text-2xl font-bold">Filters</h2>
+        <h2 className="text-2xl font-bold">Task status</h2>
         {window.innerWidth < 768 && (
           <button
             onClick={() => setIsSidebarOpen(false)}
@@ -54,7 +55,7 @@ const Sidebar = ({
         <hr className="my-4 border-gray-400" />
 
         {/* Sub-Filters */}
-        <h3 className="text-xl font-semibold mb-2">Sub-Filters</h3>
+        <h3 className="text-xl font-semibold mb-2">Filters</h3>
         <ul className="space-y-4">
           {["All", "High", "Medium", "Low", "Work", "Personal", "Shopping"].map(
             (type) => (
@@ -73,6 +74,16 @@ const Sidebar = ({
           )}
         </ul>
       </div>
+
+      {/* Sign Out Button (Mobile View) */}
+      {window.innerWidth < 768 && (
+        <button
+          onClick={handleSignOut}
+          className="w-full bg-red-500 text-white p-3 rounded-lg hover:bg-red-600 mt-4"
+        >
+          Sign Out
+        </button>
+      )}
     </aside>
   );
 };

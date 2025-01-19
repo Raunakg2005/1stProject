@@ -2,8 +2,6 @@ import React, { useState } from "react";
 import { FaPlus } from "react-icons/fa";
 import { motion } from "framer-motion";
 import { toast } from "react-toastify";
-import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
 
 const TaskForm = ({ addTask, darkMode }) => {
   const [newTask, setNewTask] = useState("");
