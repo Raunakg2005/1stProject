@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@vercel/speed-insights": "^1.1.0",
     "analytics": "^0.8.16",
     "cra-template": "1.2.0",
     "firebase": "^11.2.0",
