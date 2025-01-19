@@ -1,8 +1,8 @@
 import React from "react";
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence } from "framer-motion";
 import TaskItem from "./TaskItem";
 
-const TaskList = ({ tasks, toggleComplete, deleteTask, darkMode }) => {
+const TaskList = ({ tasks, toggleComplete, deleteTask, editTask, archiveTask, darkMode }) => {
   return (
     <div>
       <AnimatePresence>
@@ -12,6 +12,8 @@ const TaskList = ({ tasks, toggleComplete, deleteTask, darkMode }) => {
             task={task}
             toggleComplete={toggleComplete}
             deleteTask={deleteTask}
+            editTask={editTask}
+            archiveTask={archiveTask}
             darkMode={darkMode}
           />
         ))}
