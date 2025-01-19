@@ -26,7 +26,7 @@ const ProfilePage = () => {
     if (auth.currentUser) {
       setIsEmailVerified(auth.currentUser.emailVerified);
     }
-  }, [auth.currentUser]);
+  }, []);
 
   const handleUpdateProfile = async () => {
     setLoading(true);
