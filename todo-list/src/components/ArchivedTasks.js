@@ -5,7 +5,9 @@ import { FiArrowLeft, FiMoon, FiSun, FiFolder, FiAlertCircle, FiCalendar, FiTras
 const ArchivedTasks = ({ archivedTasks, setArchivedTasks, darkMode, onDeleteTask }) => {
   const [localDarkMode, setLocalDarkMode] = useState(darkMode);
   const [isLoading, setIsLoading] = useState(true);
+  
 
+  // Dynamic Lighting Effect
   useEffect(() => {
     const cards = document.querySelectorAll(".card-container");
     cards.forEach((card) => {
@@ -18,6 +20,7 @@ const ArchivedTasks = ({ archivedTasks, setArchivedTasks, darkMode, onDeleteTask
       });
     });
 
+    // Cleanup event listeners
     return () => {
       cards.forEach((card) => {
         card.removeEventListener("mousemove", () => {});
@@ -29,10 +32,10 @@ const ArchivedTasks = ({ archivedTasks, setArchivedTasks, darkMode, onDeleteTask
     setLocalDarkMode((prevMode) => !prevMode);
   };
 
+  // Update isLoading state when archivedTasks is loaded
   useEffect(() => {
-    if (archivedTasks.length > 0) {
-      setIsLoading(false);
-    }
+    // Set isLoading to false once archivedTasks is initialized
+    setIsLoading(false);
   }, [archivedTasks]);
 
   const handleDelete = async (taskId) => {
@@ -65,6 +68,7 @@ const ArchivedTasks = ({ archivedTasks, setArchivedTasks, darkMode, onDeleteTask
         localDarkMode ? "bg-gray-900 text-white" : "bg-white text-gray-900"
       }`}
     >
+      {/* Header Section */}
       <div className="flex justify-between items-center mb-8">
         <Link
           to="/"
@@ -84,13 +88,23 @@ const ArchivedTasks = ({ archivedTasks, setArchivedTasks, darkMode, onDeleteTask
         </button>
       </div>
 
+      {/* Page Title */}
       <h1 className="text-3xl font-bold mb-8 text-center">Archived Tasks</h1>
 
+      {/* Loading State */}
       {isLoading ? (
-        <p className="text-center text-gray-500">Loading archived tasks...</p>
+        <div className="flex justify-center items-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+          <p className="ml-4 text-gray-500">Loading archived tasks...</p>
+        </div>
       ) : archivedTasks.length === 0 ? (
-        <p className="text-center text-gray-500">No archived tasks found.</p>
+        // Empty Archive Message
+        <div className="flex flex-col items-center justify-center space-y-4">
+          <FiFolder className="text-6xl text-gray-400" />
+          <p className="text-xl text-gray-500">No archived tasks found.</p>
+        </div>
       ) : (
+        // Task List
         <div className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
           {archivedTasks.map((task) => (
             <div
@@ -105,6 +119,7 @@ const ArchivedTasks = ({ archivedTasks, setArchivedTasks, darkMode, onDeleteTask
                 perspective: "1000px",
               }}
             >
+              {/* Gradient Border */}
               <div
                 className={`absolute inset-0 rounded-lg bg-gradient-to-r ${
                   localDarkMode
@@ -113,6 +128,7 @@ const ArchivedTasks = ({ archivedTasks, setArchivedTasks, darkMode, onDeleteTask
                 } opacity-0 hover:opacity-100 transition-opacity duration-300`}
               ></div>
 
+              {/* Dynamic Lighting Effect */}
               <div
                 className="light-effect absolute inset-0 rounded-lg pointer-events-none"
                 style={{
@@ -122,6 +138,7 @@ const ArchivedTasks = ({ archivedTasks, setArchivedTasks, darkMode, onDeleteTask
                 }}
               ></div>
 
+              {/* Card Header */}
               <div
                 className={`p-4 ${
                   localDarkMode ? "bg-gray-700/50" : "bg-blue-50"
@@ -130,12 +147,15 @@ const ArchivedTasks = ({ archivedTasks, setArchivedTasks, darkMode, onDeleteTask
                 <h2 className="text-lg font-semibold truncate">{task.text}</h2>
               </div>
 
+              {/* Card Body */}
               <div className="p-4">
+                {/* Category with Icon */}
                 <div className="flex items-center text-sm text-gray-500 mb-3">
                   <FiFolder className="mr-2" />
                   <span className="font-medium">Category:</span> {task.category}
                 </div>
 
+                {/* Priority Badge */}
                 <div className="flex items-center text-sm text-gray-500 mb-3">
                   <FiAlertCircle className="mr-2" />
                   <span className="font-medium">Priority:</span>
@@ -148,12 +168,14 @@ const ArchivedTasks = ({ archivedTasks, setArchivedTasks, darkMode, onDeleteTask
                   </span>
                 </div>
 
+                {/* Due Date with Icon */}
                 <div className="flex items-center text-sm text-gray-500">
                   <FiCalendar className="mr-2" />
                   <span className="font-medium">Due:</span> {new Date(task.dueDateTime).toLocaleString()}
                 </div>
               </div>
 
+              {/* Delete Button */}
               <button
                 onClick={() => handleDelete(task.id)}
                 className={`absolute top-2 right-2 p-2 rounded-full ${
