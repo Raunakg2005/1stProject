@@ -9,36 +9,35 @@ import { motion } from "framer-motion";
 const AuthPage = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const [isSignUp, setIsSignUp] = useState(false); // Toggle between sign-in and sign-up
+    const [isSignUp, setIsSignUp] = useState(false); 
     const navigate = useNavigate();
 
-    // Handle email/password form submission
+    
     const handleSubmit = async (e) => {
         e.preventDefault();
 
         try {
             if (isSignUp) {
-                // Sign up with email/password
                 await createUserWithEmailAndPassword(auth, email, password);
                 toast.success("Signed up successfully!");
             } else {
-                // Sign in with email/password
+                
                 await signInWithEmailAndPassword(auth, email, password);
                 toast.success("Signed in successfully!");
             }
-            navigate("/"); // Redirect to the main app
+            navigate("/"); 
         } catch (error) {
             toast.error(error.message);
         }
     };
 
-    // Handle Google Sign-In
+
     const handleGoogleSignIn = async () => {
         try {
-            const provider = new GoogleAuthProvider(); // Create a Google Auth provider
-            await signInWithPopup(auth, provider); // Sign in with Google using a popup
+            const provider = new GoogleAuthProvider(); 
+            await signInWithPopup(auth, provider); 
             toast.success("Signed in with Google successfully!");
-            navigate("/"); // Redirect to the main app
+            navigate("/"); 
         } catch (error) {
             toast.error(error.message);
         }

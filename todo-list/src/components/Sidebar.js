@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 const Sidebar = ({
   isSidebarOpen,
@@ -8,7 +9,7 @@ const Sidebar = ({
   subFilter,
   setSubFilter,
   darkMode,
-  handleSignOut, // Pass the handleSignOut function as a prop
+  handleSignOut,
 }) => {
   return (
     <aside
@@ -18,7 +19,7 @@ const Sidebar = ({
     >
       {/* Sidebar Header */}
       <div className="flex justify-between items-center mb-8">
-        <h2 className="text-2xl font-bold">Task status</h2>
+        <h2 className="text-2xl font-bold">Task Status</h2>
         {window.innerWidth < 768 && (
           <button
             onClick={() => setIsSidebarOpen(false)}
@@ -30,7 +31,7 @@ const Sidebar = ({
       </div>
 
       {/* Scrollable Content */}
-      <div className="h-[calc(100%-8rem)] overflow-y-auto scrollbar-thin scrollbar-thumb-blue-600 scrollbar-track-gray-700 hover:scrollbar-thumb-blue-500">
+      <div className={`h-[calc(100%-12rem)] overflow-y-auto scrollbar-thin scrollbar-thumb-blue-600 scrollbar-track-gray-700 hover:scrollbar-thumb-blue-500`}>
         {/* Main Filters */}
         <ul className="space-y-4">
           {["All", "Pending", "Completed"].map((type) => (
@@ -57,7 +58,7 @@ const Sidebar = ({
         {/* Sub-Filters */}
         <h3 className="text-xl font-semibold mb-2">Filters</h3>
         <ul className="space-y-4">
-          {["All", "High", "Medium", "Low", "Work", "Personal", "Shopping"].map(
+          {["All", "High", "Medium", "Low", "Work", "Professional", "Shopping"].map(
             (type) => (
               <li
                 key={type}
@@ -73,17 +74,23 @@ const Sidebar = ({
             )
           )}
         </ul>
+
+        {/* Archive Link */}
+        <Link
+          to="/archive"
+          className="block mt-4 p-2 rounded-lg text-lg bg-purple-500 hover:bg-purple-600 text-white text-center"
+        >
+          View Archive
+        </Link>
       </div>
 
-      {/* Sign Out Button (Mobile View) */}
-      {window.innerWidth < 768 && (
-        <button
-          onClick={handleSignOut}
-          className="w-full bg-red-500 text-white p-3 rounded-lg hover:bg-red-600 mt-4"
-        >
-          Sign Out
-        </button>
-      )}
+      {/* Sign Out Button (Visible in both mobile and desktop views) */}
+      <button
+        onClick={handleSignOut}
+        className="w-full bg-red-500 text-white p-3 rounded-lg hover:bg-red-600 mt-4"
+      >
+        Sign Out
+      </button>
     </aside>
   );
 };

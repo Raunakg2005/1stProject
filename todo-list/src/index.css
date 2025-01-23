@@ -19,3 +19,67 @@
 ::-webkit-scrollbar-thumb:hover {
   background: #63b3ed; /* Blue-500 */
 }
+
+/* Floating Animation */
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+.animate-float {
+  animation: float 4s ease-in-out infinite;
+}
+
+/* 3D Tilt Effect */
+.hover\:rotate-x-6:hover {
+  transform: rotateX(6deg);
+}
+
+.hover\:rotate-y-6:hover {
+  transform: rotateY(6deg);
+}
+
+/* Dynamic Lighting Effect */
+.card-container {
+  position: relative;
+  overflow: hidden;
+}
+
+.light-effect {
+  --x: 50%;
+  --y: 50%;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.card-container:hover .light-effect {
+  opacity: 1;
+}
+
+/* Gradient Border */
+.card-container::before {
+  content: "";
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  right: -2px;
+  bottom: -2px;
+  background: linear-gradient(
+    45deg,
+    rgba(99, 102, 241, 0.5),
+    rgba(168, 85, 247, 0.5)
+  );
+  z-index: -1;
+  border-radius: 12px;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.card-container:hover::before {
+  opacity: 1;
+}

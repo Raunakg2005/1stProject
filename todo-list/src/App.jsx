@@ -1,15 +1,16 @@
 import React, { useState, useEffect } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { auth, db } from "./firebase"; // Import Firebase auth and Firestore
+import { auth, db } from "./firebase"; 
 import { onAuthStateChanged, signOut } from "firebase/auth";
 import { collection, addDoc, query, where, getDocs, doc, updateDoc, deleteDoc } from "firebase/firestore";
 import { BrowserRouter as Router, Routes, Route, Navigate, Link } from "react-router-dom";
 import Sidebar from "./components/Sidebar";
 import TaskForm from "./components/TaskForm";
 import TaskList from "./components/TaskList";
-import AuthPage from "./components/AuthPage"; // New AuthPage component
-import ProfilePage from "./components/ProfilePage"; // New ProfilePage component
+import AuthPage from "./components/AuthPage"; 
+import ProfilePage from "./components/ProfilePage"; 
+import ArchivedTasks from "./components/ArchivedTasks"; 
 
 const App = () => {
   const [tasks, setTasks] = useState([]);
@@ -21,9 +22,9 @@ const App = () => {
   const [sortBy, setSortBy] = useState("dueDate");
   const [searchQuery, setSearchQuery] = useState("");
   const [isFilterModalOpen, setIsFilterModalOpen] = useState(false);
-  const [user, setUser] = useState(null); // Track authenticated user
+  const [user, setUser] = useState(null); 
 
-  // Toggle dark mode
+ 
   const toggleDarkMode = () => {
     setDarkMode(!darkMode);
   };
@@ -33,16 +34,16 @@ const App = () => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
         setUser(user);
-        loadTasks(user.uid); // Load tasks for the logged-in user
-        loadArchivedTasks(user.uid); // Load archived tasks for the logged-in user
+        loadTasks(user.uid); 
+        loadArchivedTasks(user.uid); 
       } else {
         setUser(null);
-        setTasks([]); // Clear tasks when user signs out
-        setArchivedTasks([]); // Clear archived tasks when user signs out
+        setTasks([]); 
+        setArchivedTasks([]); 
       }
     });
 
-    return () => unsubscribe(); // Cleanup subscription
+    return () => unsubscribe(); 
   }, []);
 
   // Load tasks from Firestore
@@ -81,14 +82,14 @@ const App = () => {
         dueDateTime,
         priority,
         completed: false,
-        userId: user.uid, // Associate task with the user
+        userId: user.uid, 
       };
       const docRef = await addDoc(collection(db, "tasks"), task);
       setTasks([...tasks, { id: docRef.id, ...task }]);
       toast.success("Task added successfully!");
     } catch (error) {
       toast.error("Failed to add task: " + error.message);
-      console.error("Error adding task:", error); // Log the error for debugging
+      console.error("Error adding task:", error); 
     }
   };
 
@@ -117,6 +118,41 @@ const App = () => {
       toast.error("Task deleted!");
     } catch (error) {
       toast.error("Failed to delete task: " + error.message);
+    }
+  };
+
+  // Delete an archived task
+  const deleteArchivedTask = async (taskId) => {
+    try {
+      console.log("Deleting archived task with ID:", taskId); // Debugging
+  
+      // Query Firestore to find the document ID based on the task's id
+      const archivedTasksRef = collection(db, "archivedTasks");
+      const q = query(archivedTasksRef, where("id", "==", taskId)); // Assuming "id" is the field storing the task ID
+      const querySnapshot = await getDocs(q);
+  
+      if (querySnapshot.empty) {
+        console.error("No matching task found in Firestore");
+        toast.error("Task not found in Firestore");
+        return;
+      }
+  
+      // Get the Firestore document ID
+      const docId = querySnapshot.docs[0].id;
+      console.log("Firestore document ID to delete:", docId); // Debugging
+  
+      // Delete the task from Firestore
+      await deleteDoc(doc(db, "archivedTasks", docId));
+      console.log("Archived task deleted from Firestore"); // Debugging
+  
+      // Update the local state to remove the deleted task
+      setArchivedTasks((prevTasks) => prevTasks.filter((task) => task.id !== taskId));
+      console.log("Archived task removed from local state"); // Debugging
+  
+      toast.success("Archived task deleted successfully!");
+    } catch (error) {
+      console.error("Error deleting archived task:", error); // Debugging
+      toast.error("Failed to delete archived task: " + error.message);
     }
   };
 
@@ -209,6 +245,23 @@ const App = () => {
           element={user ? <ProfilePage /> : <Navigate to="/auth" />}
         />
 
+        {/* Archive Page */}
+        <Route
+          path="/archive"
+          element={
+            user ? (
+              <ArchivedTasks
+                archivedTasks={archivedTasks}
+                setArchivedTasks={setArchivedTasks}
+                darkMode={darkMode}
+                onDeleteTask={deleteArchivedTask} // Pass the new function
+              />
+            ) : (
+              <Navigate to="/auth" />
+            )
+          }
+        />
+
         {/* Main App */}
         <Route
           path="/"
@@ -230,7 +283,7 @@ const App = () => {
                   subFilter={subFilter}
                   setSubFilter={setSubFilter}
                   darkMode={darkMode}
-                  handleSignOut={handleSignOut} 
+                  handleSignOut={handleSignOut}
                 />
 
                 {/* Main Content */}
@@ -318,6 +371,12 @@ const App = () => {
                         className="bg-blue-500 text-white p-3 rounded-lg hover:bg-blue-600"
                       >
                         Profile
+                      </Link>
+                      <Link
+                        to="/archive"
+                        className="bg-purple-500 text-white p-3 rounded-lg hover:bg-purple-600"
+                      >
+                        Archive
                       </Link>
                     </div>
                   </div>
