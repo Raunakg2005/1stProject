@@ -190,8 +190,8 @@ const TaskForm = ({ addTask, darkMode }) => {
 
       {/* Add Task Button */}
       <motion.button
-        whileHover={{ scale: 1.05 }}
-        whileTap={{ scale: 0.95 }}
+        whileHover={{ scale: 1.02 }}
+        whileTap={{ scale: 0.98 }}
         type="submit"
         className="col-span-full bg-gradient-to-r from-blue-500 to-purple-600 text-white p-3 rounded-lg shadow-md hover:from-purple-600 hover:to-blue-500 flex items-center justify-center"
       >
